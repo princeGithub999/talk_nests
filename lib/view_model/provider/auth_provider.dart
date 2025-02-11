@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,6 +11,7 @@ import 'package:talk_nest/model/auth_model/auth_model.dart';
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
 import 'package:talk_nest/view/onBoarding/on_boarding_screen.dart';
 import 'package:talk_nest/view/page/buttom_navigation_page.dart';
+
 import '../../model/contacts_model/contacts_model.dart';
 import '../service/auth_service.dart';
 
@@ -196,6 +198,26 @@ class AuthProviderIn extends ChangeNotifier {
   }
 
   Future<Uri?> inviteWithDynamicLink() async {
+    try {
+      final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
+        link: Uri.parse('https://talknext.page.link/invite'),
+        uriPrefix: 'https://talknext.page.link',
+        androidParameters: const AndroidParameters(
+          packageName: 'com.example.talk_nest',
+        ),
+      );
+
+      final ShortDynamicLink shortLink =
+          await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
+      return shortLink.shortUrl;
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Dynamic Link Error: $e');
+      print('Error Creating Dynamic Link: $e');
+      return null;
+    }
+  }
+
+  Future<Uri?> inviteWithDynamicLinks() async {
     try {
       final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse('https://talknext.page.link/invite'),
