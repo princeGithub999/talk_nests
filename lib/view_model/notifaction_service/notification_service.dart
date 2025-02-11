@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
 import 'package:talk_nest/view/page/chat_page.dart';
-import 'package:talk_nest/view_model/secret/secret.dart';
+import 'package:talk_nest/view_model/google_secret/google_secret.dart';
 
 class NotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -100,7 +100,7 @@ class NotificationService {
       required String targetUserImage,
       required String targetUserFcmToken}) async {
     print("token id: $token");
-    final serverKey = await Secret.getServerKey();
+    final serverKey = await GoogleSecret.getServerKey();
 
     try {
       final response = await http.post(
