@@ -99,7 +99,6 @@ class NotificationService {
       required String targetUserName,
       required String targetUserImage,
       required String targetUserFcmToken}) async {
-    print("token id: $token");
     final serverKey = await GoogleSecret.getServerKey();
 
     try {
