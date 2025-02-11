@@ -20,6 +20,7 @@ class AuthProviderIn extends ChangeNotifier {
   List<AuthModel> profileData = [];
   AuthModel currentUser = AuthModel();
   bool isLoding = false;
+  bool isEditing = false;
   File? imageFile;
   String? errorMessage;
 
@@ -197,19 +198,44 @@ class AuthProviderIn extends ChangeNotifier {
     }
   }
 
+  Future<void> isEditingF() async {
+    if (isEditing) {
+      isEditing = false;
+    } else {
+      isEditing = true;
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateProfileData(AuthModel userData) async {
+    try {
+      isLoding = true;
+      notifyListeners();
+      authService.updateProfileData(userData);
+    } catch (error) {
+      Fluttertoast.showToast(msg: 'update Error $error');
+    } finally {
+      isLoding = false;
+      notifyListeners();
+    }
+  }
+
   Future<Uri?> inviteWithDynamicLink() async {
     try {
-      final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
-        link: Uri.parse('https://talknext.page.link/invite'),
-        uriPrefix: 'https://talknext.page.link',
-        androidParameters: const AndroidParameters(
-          packageName: 'com.example.talk_nest',
-        ),
-      );
+      // final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
+      //   link: Uri.parse('https://talknext.page.link/invite'),
+      //   uriPrefix: 'https://talknext.page.link',
+      //   androidParameters: const AndroidParameters(
+      //     packageName: 'com.example.talk_nest',
+      //   ),
+      // );
+      //
+      // final ShortDynamicLink shortLink =
+      //     await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
+      // return shortLink.shortUrl;
 
-      final ShortDynamicLink shortLink =
-          await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
-      return shortLink.shortUrl;
+      var link = authService.inviteWithDynamicLink();
+      return link;
     } catch (e) {
       Fluttertoast.showToast(msg: 'Dynamic Link Error: $e');
       print('Error Creating Dynamic Link: $e');

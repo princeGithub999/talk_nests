@@ -10,7 +10,7 @@ class ElevatedButtonThemes {
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
         side: BorderSide(color: AppColors.blue900)),
-    backgroundColor: AppColors.blue900,
+    backgroundColor: AppColors.lightBlue,
     textStyle: const TextStyle(color: AppColors.blackMe),
   ));
 

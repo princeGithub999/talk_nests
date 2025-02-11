@@ -1,14 +1,17 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:talk_nest/utils/constants/app_string.dart';
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
+
 import '../../view_model/provider/auth_provider.dart';
 import '../constants/colors.dart';
 import '../constants/images.dart';
 
 class ButtonWidget {
+  final sizes = MediaQuery.of(Get.context!).size;
+  final isDark = AppHelperFunctions.isDarkMode(Get.context!);
+
   static Widget googleAuthButton(
     VoidCallback onPress,
   ) {
@@ -63,7 +66,7 @@ class ButtonWidget {
           style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 80)),
           child: authProvider.isLoding
-              ? SizedBox(
+              ? const SizedBox(
                   height: 20,
                   width: 20,
                   child: CircularProgressIndicator(),
@@ -143,5 +146,21 @@ class ButtonWidget {
           onPress();
         },
         icon: Icon(icon));
+  }
+
+  static Widget anyWereButtom(VoidCallback onPress, String hintName) {
+    return ElevatedButton(
+      onPressed: () {
+        onPress();
+      },
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 140),
+        // backgroundColor: Colors.blueGrey,
+      ),
+      child: Text(
+        hintName,
+        style: Theme.of(Get.context!).textTheme.titleSmall,
+      ),
+    );
   }
 }
