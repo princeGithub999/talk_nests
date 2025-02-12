@@ -211,31 +211,45 @@ class AuthProviderIn extends ChangeNotifier {
     try {
       isLoding = true;
       notifyListeners();
-      authService.updateProfileData(userData);
+
+      String updateImage = await authService.uploadProfileImage(
+          imageFile!, FirebaseAuth.instance.currentUser!.uid);
+
+      if (updateImage.isNotEmpty) {
+        var updateData = {
+          'userName': userData.userName,
+          'userEmail': userData.userEmail,
+          'userPhone': userData.userPhone,
+          'userAddress': userData.userAddress,
+          'userImage': updateImage
+        };
+
+        authService.updateProfileData(updateData);
+      }
+
+      await getCurrentUser();
     } catch (error) {
       Fluttertoast.showToast(msg: 'update Error $error');
     } finally {
       isLoding = false;
+      isEditing = false;
       notifyListeners();
     }
   }
 
   Future<Uri?> inviteWithDynamicLink() async {
     try {
-      // final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
-      //   link: Uri.parse('https://talknext.page.link/invite'),
-      //   uriPrefix: 'https://talknext.page.link',
-      //   androidParameters: const AndroidParameters(
-      //     packageName: 'com.example.talk_nest',
-      //   ),
-      // );
-      //
-      // final ShortDynamicLink shortLink =
-      //     await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
-      // return shortLink.shortUrl;
+      final DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
+        link: Uri.parse('https://talknext.page.link/invite'),
+        uriPrefix: 'https://talknext.page.link',
+        androidParameters: const AndroidParameters(
+          packageName: 'com.example.talk_nest',
+        ),
+      );
 
-      var link = authService.inviteWithDynamicLink();
-      return link;
+      final ShortDynamicLink shortLink =
+          await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
+      return shortLink.shortUrl;
     } catch (e) {
       Fluttertoast.showToast(msg: 'Dynamic Link Error: $e');
       print('Error Creating Dynamic Link: $e');

@@ -9,7 +9,7 @@ import 'package:talk_nest/utils/globle_widget/shimmerEffect.dart';
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
 import 'package:talk_nest/view/page/chat_page.dart';
 import 'package:talk_nest/view_model/provider/auth_provider.dart';
-import 'package:talk_nest/view_model/provider/chat_provider.dart';
+
 import '../../view_model/notifaction_service/notification_service.dart';
 import '../../view_model/provider/contect_provider.dart';
 
@@ -39,7 +39,7 @@ class _ContectScreenState extends State<ContectScreen> {
   void notificationHandler() {
     notificationService.initialize();
     FirebaseMessaging.onMessage.listen((message) {
-      notificationService.showNotification(message);
+      notificationService.showNotificationWithReply(message);
     });
     notificationService.requestNotificationPermission();
   }

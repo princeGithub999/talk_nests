@@ -45,11 +45,12 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
+      onDidReceiveNotificationResponse: handleNotificationResponse,
     );
 
     FirebaseMessaging.onMessage.listen(
       (event) {
-        showNotification(event);
+        showNotificationWithReply(event);
       },
     );
 
@@ -68,27 +69,65 @@ class NotificationService {
     );
   }
 
-  Future<void> showNotification(RemoteMessage message) async {
+  Future<void> showNotificationWithReply(RemoteMessage message) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'channelId',
-      'channelName',
-      channelDescription: 'channelDescription',
-      importance: Importance.max,
+      'reply_channel_id',
+      'Reply Notifications',
+      channelDescription: 'Chat message with direct reply',
+      importance: Importance.high,
       priority: Priority.high,
+      actions: <AndroidNotificationAction>[
+        AndroidNotificationAction(
+          'reply_action_id',
+          'Reply',
+          inputs: <AndroidNotificationActionInput>[
+            AndroidNotificationActionInput(label: 'Type your message...')
+          ],
+        ),
+        AndroidNotificationAction('mute_action_id', 'Mute'),
+        AndroidNotificationAction('end_chat_action_id', 'Mark as read'),
+      ],
     );
-
-    int notificationId = 1;
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
-      notificationId,
+      0,
       message.notification?.title,
       message.notification?.body,
       notificationDetails,
-      payload: 'not payload',
+      payload: jsonEncode(message.data),
     );
+  }
+
+  void handleNotificationResponse(NotificationResponse response) async {
+    if (response.payload != null && response.input != null) {
+      Map<String, dynamic> data = jsonDecode(response.payload!);
+      String replyText = response.input!;
+
+      String senderId = currentUser?.uid ?? '';
+      String receiverId = data['userId'];
+
+      // Firestore me reply save karna
+      await firestore.collection('messages').add({
+        'senderId': senderId,
+        'receiverId': receiverId,
+        'message': replyText,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  Future<void> handlerMessage(RemoteMessage message) async {
+    AppHelperFunctions.navigateToScreen(
+        Get.context!,
+        ChatPage(
+          userId: message.data['userId'],
+          userImage: message.data['targetUserImage'],
+          notificationToken: message.data['targetUserFcmToken'],
+          userName: message.data['reciverName'],
+        ));
   }
 
   void sendOrderNotification(
@@ -138,16 +177,5 @@ class NotificationService {
         msg: "Error sending notification",
       );
     }
-  }
-
-  Future<void> handlerMessage(RemoteMessage message) async {
-    AppHelperFunctions.navigateToScreen(
-        Get.context!,
-        ChatPage(
-          userId: message.data['userId'],
-          userImage: message.data['targetUserImage'],
-          notificationToken: message.data['targetUserFcmToken'],
-          userName: message.data['reciverName'],
-        ));
   }
 }

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -81,22 +80,10 @@ class AuthService {
     }
   }
 
-  Future<void> updateProfileData(
-    AuthModel data,
-  ) async {
+  Future<void> updateProfileData(Map<String, dynamic> data) async {
     await db
         .collection('Chatting_UserData')
         .doc(_auth.currentUser!.uid)
-        .update(data.toMap());
-  }
-
-  Future<Uri?> inviteWithDynamicLink() async {
-    var shortLink = await FirebaseDynamicLinks.instance.buildShortLink(
-        DynamicLinkParameters(
-            link: Uri.parse('https://talknext.page.link/H3Ed'),
-            uriPrefix: 'https://talknext.page.link/H3Ed',
-            androidParameters:
-                const AndroidParameters(packageName: 'com.example.talk_nest')));
-    return shortLink.shortUrl;
+        .update(data);
   }
 }

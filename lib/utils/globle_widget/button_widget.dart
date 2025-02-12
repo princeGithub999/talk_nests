@@ -149,18 +149,25 @@ class ButtonWidget {
   }
 
   static Widget anyWereButtom(VoidCallback onPress, String hintName) {
-    return ElevatedButton(
-      onPressed: () {
-        onPress();
+    return Consumer<AuthProviderIn>(
+      builder:
+          (BuildContext context, AuthProviderIn authProvider, Widget? child) {
+        return ElevatedButton(
+          onPressed: () {
+            onPress();
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 140),
+            // backgroundColor: Colors.blueGrey,
+          ),
+          child: authProvider.isLoding
+              ? const CircularProgressIndicator()
+              : Text(
+                  hintName,
+                  style: Theme.of(Get.context!).textTheme.titleSmall,
+                ),
+        );
       },
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 140),
-        // backgroundColor: Colors.blueGrey,
-      ),
-      child: Text(
-        hintName,
-        style: Theme.of(Get.context!).textTheme.titleSmall,
-      ),
     );
   }
 }
