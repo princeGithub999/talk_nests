@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:talk_nest/model/call_model/audio_call_model.dart';
-import 'package:talk_nest/view_model/provider/audio_call_provider.dart';
 import 'package:talk_nest/view_model/provider/auth_provider.dart';
+import 'package:talk_nest/view_model/provider/call_provider.dart';
 import 'package:talk_nest/view_model/provider/chat_provider.dart';
 import 'package:talk_nest/view_model/service/audio_call_service.dart';
 
@@ -13,7 +13,7 @@ class ChatStatusGetX extends GetxController with WidgetsBindingObserver {
   late CallProvider callProvider;
   late AuthProviderIn authProviderIn;
   DateTime currentTime = DateTime.now();
-  AudioCallService audioCallService = AudioCallService();
+  CallService audioCallService = CallService();
 
   @override
   void onInit() async {

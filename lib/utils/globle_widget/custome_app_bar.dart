@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:talk_nest/model/auth_model/auth_model.dart';
 import 'package:talk_nest/utils/constants/colors.dart';
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
-import 'package:talk_nest/view_model/provider/audio_call_provider.dart';
+import 'package:talk_nest/view_model/provider/call_provider.dart';
 import 'package:talk_nest/view_model/provider/chat_provider.dart';
 
 import '../../view/page/audio_call_page.dart';

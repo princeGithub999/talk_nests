@@ -8,11 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:talk_nest/utils/theme/app_theme.dart';
 import 'package:talk_nest/view/page/splace_screen.dart';
 import 'package:talk_nest/view_model/notifaction_service/notification_service.dart';
-import 'package:talk_nest/view_model/provider/audio_call_provider.dart';
 import 'package:talk_nest/view_model/provider/auth_provider.dart';
 import 'package:talk_nest/view_model/provider/buttom_navigation_provider.dart';
+import 'package:talk_nest/view_model/provider/call_provider.dart';
 import 'package:talk_nest/view_model/provider/chat_provider.dart';
 import 'package:talk_nest/view_model/provider/contect_provider.dart';
+
 import 'firebase_options.dart';
 
 void main() async {

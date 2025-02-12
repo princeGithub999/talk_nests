@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:talk_nest/view/page/video_call_page.dart';
 import 'package:talk_nest/view_model/service/audio_call_service.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../model/call_model/audio_call_model.dart';
 import '../../utils/helpers/helper_functions.dart';
 import '../../view/page/audio_call_page.dart';
@@ -17,7 +16,7 @@ class CallProvider extends ChangeNotifier {
   final uuid = Uuid().v4();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore db = FirebaseFirestore.instance;
-  AudioCallService audioCallService = AudioCallService();
+  CallService audioCallService = CallService();
   var authProvider = Provider.of<AuthProviderIn>(Get.context!, listen: false);
 
   Future<void> callAction(String callReceiverEmail, String callReceiverName,

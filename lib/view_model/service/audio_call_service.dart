@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:talk_nest/model/call_model/audio_call_model.dart';
 import 'package:talk_nest/utils/helpers/helper_functions.dart';
 
-class AudioCallService {
+class CallService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
